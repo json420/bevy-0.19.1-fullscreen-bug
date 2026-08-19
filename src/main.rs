@@ -1,15 +1,18 @@
 use bevy::{
     prelude::*,
-    window::{
-        PresentMode, PrimaryWindow, VideoModeSelection, WindowMode, WindowPlugin, WindowResized,
-    },
+    window::{PrimaryWindow, VideoModeSelection, WindowMode},
 };
 
 fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
+        .add_systems(Startup, setup)
         .add_systems(Update, toggle_fullscreen)
         .run();
+}
+
+fn setup(mut commands: Commands) {
+    commands.spawn(Camera3d::default());
 }
 
 fn toggle_fullscreen(
