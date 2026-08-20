@@ -4,7 +4,9 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-bevy = { git = "https://github.com/bevyengine/bevy.git", branch = "main", version = "0.20.0-dev" }
 
 # This bug occurs with bevy 0.19.1 and 0.19.0
-#bevy = "0.19.1"
+bevy = { version = "0.19.1", features = ["debug"] }
+
+# But does not occur with git main
+# bevy = { git = "https://github.com/bevyengine/bevy.git", branch = "main", version = "0.20.0-dev" }
