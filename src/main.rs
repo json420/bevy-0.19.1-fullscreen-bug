@@ -22,9 +22,7 @@ fn toggle_fullscreen(
     if keyboard.just_pressed(KeyCode::F11) {
         if let Ok(mut window) = query.single_mut() {
             window.mode = match window.mode {
-                WindowMode::Windowed => {
-                    WindowMode::Fullscreen(MonitorSelection::Primary, VideoModeSelection::Current)
-                }
+                WindowMode::Windowed => WindowMode::BorderlessFullscreen(MonitorSelection::Primary),
                 _ => WindowMode::Windowed,
             };
         }
