@@ -1,0 +1,49 @@
+# Bevy 0.19.1 Bug when trying to Fullscreen
+
+```
+$ RUST_BACKTRACE=1 cargo run
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.19s
+     Running `target/debug/bevy-fullscreen-bug`
+2026-08-20T00:07:06.090784Z  INFO bevy_diagnostic::system_information_diagnostics_plugin::internal: SystemInfo { os: "Linux (Pop!_OS 24.04)", kernel: "7.0.11-76070011-generic", cpu: "Intel(R) Core(TM) Ultra 5 125H", core_count: "14", memory: "30.9 GiB" }
+2026-08-20T00:07:06.119671Z  INFO bevy_render::renderer: AdapterInfo { name: "Intel(R) Arc(tm) Graphics (MTL)", vendor: 32902, device: 32085, device_type: IntegratedGpu, device_pci_bus_id: "0000:00:02.0", driver: "Intel open-source Mesa driver", driver_info: "Mesa 25.2.8-0ubuntu0.24.04.2", backend: Vulkan, subgroup_min_size: 8, subgroup_max_size: 32, transient_saves_memory: false }
+2026-08-20T00:07:06.612013Z  INFO bevy_pbr::cluster: GPU clustering is supported on this device.
+2026-08-20T00:07:06.612197Z  INFO bevy_render::batching::gpu_preprocessing: GPU preprocessing is fully supported on this device.
+2026-08-20T00:07:06.615061Z  INFO bevy_winit::system: Creating new window bevy-fullscreen-bug (65v0)
+
+thread 'main' (23436) panicked at /home/json420/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/bevy_winit-0.19.1/src/system.rs:345:29:
+Could not find monitor for Primary
+stack backtrace:
+   0: __rustc::rust_begin_unwind
+             at /rustc/8bab26f4f68e0e26f0bb7960be334d5b520ea452/library/std/src/panicking.rs:689:5
+   1: core::panicking::panic_fmt
+             at /rustc/8bab26f4f68e0e26f0bb7960be334d5b520ea452/library/core/src/panicking.rs:80:14
+   2: bevy_winit::system::changed_windows::{closure#0}::{closure#0}
+             at /home/json420/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/bevy_winit-0.19.1/src/system.rs:345:29
+   3: <core::option::Option<winit::monitor::MonitorHandle>>::unwrap_or_else::<bevy_winit::system::changed_windows::{closure#0}::{closure#0}>
+             at /rustc/8bab26f4f68e0e26f0bb7960be334d5b520ea452/library/core/src/option.rs:1064:21
+   4: bevy_winit::system::changed_windows::{closure#0}
+             at /home/json420/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/bevy_winit-0.19.1/src/system.rs:344:26
+   5: <std::thread::local::LocalKey<core::cell::RefCell<bevy_winit::winit_windows::WinitWindows>>>::with_borrow::<bevy_winit::system::changed_windows::{closure#0}, ()>::{closure#0}
+             at /rustc/8bab26f4f68e0e26f0bb7960be334d5b520ea452/library/std/src/thread/local.rs:673:26
+   6: <std::thread::local::LocalKey<core::cell::RefCell<bevy_winit::winit_windows::WinitWindows>>>::try_with::<<std::thread::local::LocalKey<core::cell::RefCell<bevy_winit::winit_windows::WinitWindows>>>::with_borrow<bevy_winit::system::changed_windows::{closure#0}, ()>::{closure#0}, ()>
+             at /rustc/8bab26f4f68e0e26f0bb7960be334d5b520ea452/library/std/src/thread/local.rs:462:12
+   7: <std::thread::local::LocalKey<core::cell::RefCell<bevy_winit::winit_windows::WinitWindows>>>::with::<<std::thread::local::LocalKey<core::cell::RefCell<bevy_winit::winit_windows::WinitWindows>>>::with_borrow<bevy_winit::system::changed_windows::{closure#0}, ()>::{closure#0}, ()>
+             at /rustc/8bab26f4f68e0e26f0bb7960be334d5b520ea452/library/std/src/thread/local.rs:426:20
+   8: <std::thread::local::LocalKey<core::cell::RefCell<bevy_winit::winit_windows::WinitWindows>>>::with_borrow::<bevy_winit::system::changed_windows::{closure#0}, ()>
+             at /rustc/8bab26f4f68e0e26f0bb7960be334d5b520ea452/library/std/src/thread/local.rs:673:14
+   9: bevy_winit::system::changed_windows
+             at /home/json420/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/bevy_winit-0.19.1/src/system.rs:317:19
+  10: <bevy_winit::system::changed_windows as core::ops::function::FnMut<(bevy_ecs::system::commands::Commands, bevy_ecs::system::query::Query<(bevy_ecs::entity::Entity, &mut bevy_window::window::Window, &mut bevy_winit::system::CachedWindow, core::option::Option<&bevy_window::window::OnMonitor>), bevy_ecs::query::filter::Changed<bevy_window::window::Window>>, bevy_ecs::change_detection::params::Res<bevy_winit::winit_monitors::WinitMonitors>, bevy_ecs::message::message_writer::MessageWriter<bevy_window::event::WindowResized>, bevy_ecs::message::message_writer::MessageWriter<bevy_window::event::WindowEvent>, bevy_ecs::message::message_writer::MessageWriter<bevy_window::event::WindowScaleFactorChanged>, bevy_ecs::system::system_param::NonSendMarker)>>::call_mut
+             at /rustc/8bab26f4f68e0e26f0bb7960be334d5b520ea452/library/core/src/ops/function.rs:166:5
+  11: <&mut bevy_winit::system::changed_windows as core::ops::function::FnMut<(bevy_ecs::system::commands::Commands, bevy_ecs::system::query::Query<(bevy_ecs::entity::Entity, &mut bevy_window::window::Window, &mut bevy_winit::system::CachedWindow, core::option::Option<&bevy_window::window::OnMonitor>), bevy_ecs::query::filter::Changed<bevy_window::window::Window>>, bevy_ecs::change_detection::params::Res<bevy_winit::winit_monitors::WinitMonitors>, bevy_ecs::message::message_writer::MessageWriter<bevy_window::event::WindowResized>, bevy_ecs::message::message_writer::MessageWriter<bevy_window::event::WindowEvent>, bevy_ecs::message::message_writer::MessageWriter<bevy_window::event::WindowScaleFactorChanged>, bevy_ecs::system::system_param::NonSendMarker)>>::call_mut
+             at /rustc/8bab26f4f68e0e26f0bb7960be334d5b520ea452/library/core/src/ops/function.rs:298:21
+  12: <_ as bevy_ecs::system::function_system::SystemParamFunction<fn(_, _, _, _, _, _, _) -> _>>::run::call_inner::<(), bevy_ecs::system::commands::Commands, bevy_ecs::system::query::Query<(bevy_ecs::entity::Entity, &mut bevy_window::window::Window, &mut bevy_winit::system::CachedWindow, core::option::Option<&bevy_window::window::OnMonitor>), bevy_ecs::query::filter::Changed<bevy_window::window::Window>>, bevy_ecs::change_detection::params::Res<bevy_winit::winit_monitors::WinitMonitors>, bevy_ecs::message::message_writer::MessageWriter<bevy_window::event::WindowResized>, bevy_ecs::message::message_writer::MessageWriter<bevy_window::event::WindowEvent>, bevy_ecs::message::message_writer::MessageWriter<bevy_window::event::WindowScaleFactorChanged>, bevy_ecs::system::system_param::NonSendMarker, &mut bevy_winit::system::changed_windows>
+             at /home/json420/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/bevy_ecs-0.19.1/src/system/function_system.rs:904:21
+  13: <bevy_winit::system::changed_windows as bevy_ecs::system::function_system::SystemParamFunction<fn(bevy_ecs::system::commands::Commands, bevy_ecs::system::query::Query<(bevy_ecs::entity::Entity, &mut bevy_window::window::Window, &mut bevy_winit::system::CachedWindow, core::option::Option<&bevy_window::window::OnMonitor>), bevy_ecs::query::filter::Changed<bevy_window::window::Window>>, bevy_ecs::change_detection::params::Res<bevy_winit::winit_monitors::WinitMonitors>, bevy_ecs::message::message_writer::MessageWriter<bevy_window::event::WindowResized>, bevy_ecs::message::message_writer::MessageWriter<bevy_window::event::WindowEvent>, bevy_ecs::message::message_writer::MessageWriter<bevy_window::event::WindowScaleFactorChanged>, bevy_ecs::system::system_param::NonSendMarker)>>::run
+             at /home/json420/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/bevy_ecs-0.19.1/src/system/function_system.rs:907:17
+  14: <bevy_ecs::system::function_system::FunctionSystem<fn(bevy_ecs::system::commands::Commands, bevy_ecs::system::query::Query<(bevy_ecs::entity::Entity, &mut bevy_window::window::Window, &mut bevy_winit::system::CachedWindow, core::option::Option<&bevy_window::window::OnMonitor>), bevy_ecs::query::filter::Changed<bevy_window::window::Window>>, bevy_ecs::change_detection::params::Res<bevy_winit::winit_monitors::WinitMonitors>, bevy_ecs::message::message_writer::MessageWriter<bevy_window::event::WindowResized>, bevy_ecs::message::message_writer::MessageWriter<bevy_window::event::WindowEvent>, bevy_ecs::message::message_writer::MessageWriter<bevy_window::event::WindowScaleFactorChanged>, bevy_ecs::system::system_param::NonSendMarker), (), (), bevy_winit::system::changed_windows> as bevy_ecs::system::system::System>::run_unsafe
+             at /home/json420/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/bevy_ecs-0.19.1/src/system/function_system.rs:696:29
+note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
+Encountered a panic in system `bevy_winit::system::changed_windows`!
+Encountered a panic in system `bevy_app::main_schedule::Main::run_main`!
+```
